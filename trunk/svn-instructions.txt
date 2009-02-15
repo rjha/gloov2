@@ -1,0 +1,17 @@
+- How to checkout the code 
+========================================
+1) create a folder called gloov2
+2) cd inside gloov2 folder
+3) $svn checkout https://gloov2.googlecode.com/svn/trunk/ --username <username>  --password <password>
+
+Your <username> is project member username.
+
+1. jha.rajeev
+2. anishkv
+
+Password is google code password 
+
+Anonymous checkout allowed
+============================== 
+
+svn checkout http://gloov2.googlecode.com/svn/trunk/ gloov2-read-only
