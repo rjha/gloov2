@@ -1,4 +1,0 @@
-svn checkout https://gloov2.googlecode.com/svn/trunk/ gloov2 --username jha.rajeev
-
-When prompted, enter your generated googlecode.com password.
-svn checkout http://gloov2.googlecode.com/svn/trunk/ gloov2-read-only
