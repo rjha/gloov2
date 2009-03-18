@@ -17,14 +17,17 @@
 		
 		
 		static function getInstance() {
+            
 			if(self::$instance == NULL) {
 				self::$instance = new Gloo_DB();	
 			}	
 			return self::$instance ;
 			
 		}
-		
+
+        
 		function connection() {
+            $this->numCalls++ ;
 			return $this->mysqli ;
 
 		}
