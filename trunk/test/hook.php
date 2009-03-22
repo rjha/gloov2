@@ -10,7 +10,8 @@
            test_compiler();
            // test_printer();
            //test_log();
-
+          // test_flexy();
+           
 		}
 
         function test_log() {
@@ -30,7 +31,7 @@
 		}
 
 		function test_compiler() {
-            $source = "<div> some text  __#_[VIDEO,size=4,abc=MAX]_#__   </div> <div> another text __#_[NEWS,size=2]_#__ </div>";
+            $source = "<div> some text    __#_[NEWS,size=2]_#__ </div> <div> another text   __#_[VIDEO,size=4,abc=MAX]_#__</div>";
             $compiler = new UIX_Compiler();
             $output = $compiler->compile($source);
             echo $output ;
@@ -46,5 +47,28 @@
             
 
         }
+
+         function test_flexy() {
+              
+              // define object and properties
+              // corresponding to template variables
+              $page = new stdClass;
+              $page->items = array(
+                    'Eggs',
+                    'Bread',
+                    'Milk',
+                    'Bacon',
+                    'Cornflakes'
+                );
+
+                          
+                $flexy = Gloo_Flexy::getInstance();
+              
+                $flexy->compile('test.tmpl');
+                $flexy->outputObject($page);
+
+
+                
+         }
 		
 ?>

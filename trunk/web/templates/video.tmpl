@@ -1,0 +1,12 @@
+
+<!--  videos:start  -->
+<div class="video">
+
+    <ul>
+        {foreach:videos,video}
+            <li><a href="/app/modules/core/v/video.php?org={orgKey}"> {video.title} </a></li>
+		{end:}
+        </ul>
+        
+        <a href="/app/modules/core/v/video.php?org={orgKey}" class="more">more &raquo;</a>
+</div> <!-- videos:end -->
