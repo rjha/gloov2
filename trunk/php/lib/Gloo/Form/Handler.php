@@ -24,8 +24,7 @@ class Gloo_Form_Handler {
 		$this->fvalues = array();
 		$this->ferrors = array();
 		$this->validated = false ;
-		
-		
+	
 	}
 	
 	function addError($error) {
@@ -76,16 +75,22 @@ class Gloo_Form_Handler {
 	}
 	
 	
-	function add($vname,$vdisplay,$vsize,$vrequired=false){
+	function add($vname,$vdisplay,$vsize,$sanitize = false,$vrequired=false){
 		if(is_null($this->post) || sizeof($this->post) == 0 ) {
 			trigger_error(' Form handler POST array not set' ,E_USER_ERROR);
 				
 		}
-		$element = new Form_Element();
+		$element = new Gloo_Form_Element();
 		$value =  '';
+   
 		if(isset($this->post[$vname]) ){
-			$value = self::html_secure($this->post[$vname]);
+            if($sanitize) {
+                $value = self::html_secure($this->post[$vname]);
+            } else {
+                $value = trim($this->post[$vname]);
+            }
 		}
+
 		$element->setName($vname);
 		$element->setValue($value);
 		$element->setRequired($vrequired);
@@ -96,29 +101,7 @@ class Gloo_Form_Handler {
 		
 	}
 	
-	function addRaw($vname,$vdisplay,$vsize,$vrequired=false){
 		
-		if(is_null($this->post) || sizeof($this->post) == 0 ) {
-			trigger_error(' Form handler POST array not set' ,E_USER_ERROR);
-				
-		}
-		
-		$element = new Form_Element();
-		$value =  '';
-		// Add raw POST data after trimming
-		if(isset($this->post[$vname]) ){
-			$value = trim($this->post[$vname]);
-		}
-		$element->setName($vname);
-		$element->setValue($value);
-		$element->setRequired($vrequired);
-		$element->setSize($vsize);
-		$element->setDisplay($vdisplay);
-		$this->felements[$vname]= $element ;
-		
-	}
-	
-	
 	function validate() {
 			//print_r($this->felements);
 			// go over all form elements 
