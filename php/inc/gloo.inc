@@ -25,7 +25,7 @@
 	$glooCodePath = "d:/gloov2/php/" ;
 	$glooWebPath = "d:/gloov2/web/" ;
 	//include required application path 
-	$glooBaseURI = "http://".$glooHostName.'/v2' ;
+	$glooBaseURI = "http://".$glooHostName.'/app2' ;
 	
 	
 	$_SERVER['GLOO_LIB_DIR'] = $glooCodePath.'lib/' ;
