@@ -16,7 +16,13 @@
 			return $token ;
 				
 		}
-				
+        
+        static function arr2nlstr($arr) {
+           $str = array_reduce($arr, create_function('$a,$b', 'return $a."\n".$b ;'));
+           return $str ;
+        }
+
+      
 		
 		
 	}

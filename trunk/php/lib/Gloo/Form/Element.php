@@ -37,8 +37,8 @@
 		}
 		
 		function validate() {
-			
-			if($this->required && empty($this->value)) {
+
+            if($this->required && empty($this->value)) {
 				array_push($this->errors, $this->display. " is a required field " );
 					
 			}	
@@ -50,7 +50,10 @@
 					array_push($this->errors,$this->display. " should be ".$this->eqvalue. " ,please try again!" );
 				}
 			}
-			
+			Gloo_Logger::getInstance()->debug('Form element :: '.$this->name);
+            Gloo_Logger::getInstance()->debug('size='.$this->size. ' required?='.$this->required);
+            //Gloo_Logger::getInstance()->debug('errors?='.Gloo_Util::arr2nlstr($this->errors));
+            
 		}
 					
 		

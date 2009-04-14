@@ -24,7 +24,7 @@
             $page->set_sticky_map('ca_note_form',$fvalues);
             //@todo get this value from page workflow data
             header("location: /app2/ca/note/add/text.php");
-            exit(1) ;
+            //exit(1) ;
         }
         
         //Everything went fine
