@@ -103,7 +103,7 @@ class Gloo_Form_Handler {
 	
 		
 	function validate() {
-			//print_r($this->felements);
+
 			// go over all form elements 
 			foreach($this->felements as $felement) {
 				$felement->validate();

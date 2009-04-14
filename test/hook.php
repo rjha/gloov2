@@ -7,13 +7,22 @@
 		
 		function run_main() {
 
-           test_compiler();
+          // test_compiler();
            // test_printer();
            //test_log();
           // test_flexy();
-           
+          test_form_handler();
 		}
+        
+        function test_form_handler() { 
+            $arr = array('title' => '' , 'name' => 'Rajeev');
+            $fhandler = new Gloo_Form_Handler($arr);
+            $fhandler->add('title','Title',50,true,true);
+            $fhandler->validate();
+            $fvalues = $fhandler->getValues();
+        }
 
+        
         function test_log() {
             Gloo_Logger::getInstance()->debug('debug.message1');
             Gloo_Logger::getInstance()->info('info.message2');

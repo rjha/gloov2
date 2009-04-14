@@ -13,7 +13,7 @@
 		private function __clone() {
 
 		}
-
+        
         static function getInstance() {
 
 			if(self::$instance == NULL) {

@@ -4,32 +4,80 @@
 
 /**
  *
- * Gloo logger class is a wrapper around PEAR Log package.
- * @see http://www.indelible.org/php/Log/guide.html
+ * Gloo logger class is no longer  a wrapper around PEAR Log.
+ * PEAR Log is not compatible with PHP5 E_STRICT MODE.
+ * Gloo_Logger is our own implementation of logger classes.
+ * 
+ * @see also http://www.indelible.org/php/Log/guide.html
  *
  * @author rajeevj
  */
 
-require_once 'Log.php';
 
 class Gloo_Logger {
 
-    private $logger ;
+    
     static private $instance = NULL ;
+    private $sysLevel ;
+    private $fhandle ;
+    private $priority ;
+    private $isDebug = false ;
+
+
+
+    const ERROR_PRIORITY = 4;
+    const WARN_PRIORITY = 3 ;
+    const INFO_PRIORITY = 2 ;
+    const DEBUG_PRIORITY = 1 ;
     
     function __construct() {
-        $conf = array('mode' => 0600, 'lineFormat' => ' %1$s [%3$s]  %5$s [line: %6$s] -   %4$s');
-        $this->logger = &Log::factory('file', $_SERVER['GLOO_WEB_DIR'].'gloo.log','gloo',$conf);
-        //priority mask - change the global level here
-        //@todo read and decide using some config file
-        // allowed values - debug,info,warning,error
-        $priority = Log::stringToPriority('debug');
-        $mask = Log::MAX($priority);
-        $this->logger->setMask($mask);
-
-
+            //level is an integer
+        	$logfile = $_SERVER['GLOO_WEB_DIR']."gloov2.log" ;
+            //open for writing only 
+			$this->fhandle = fopen($logfile, "a+");
+            $this->sysLevel = Gloo_Config::getInstance()->log_level() ;
+            $this->priority = $this->level_to_priority($this->sysLevel);
+            $this->isDebug = Gloo_Config::getInstance()->is_debug();
+            
     }
 
+    function __destruct() {
+        fclose($this->fhandle);
+    }
+
+    function level_to_priority($level) {
+      
+        $priority = Gloo_Logger::ERROR_PRIORITY ;
+        if(is_null($level) || empty($level)) {
+            return $priority ;
+        }
+        $level = strtoupper($level);
+       
+        switch($level) {
+            case 'DEBUG' :
+                $priority = Gloo_Logger::DEBUG_PRIORITY ;
+                break ;
+            case 'INFO' :
+                 $priority = Gloo_Logger::INFO_PRIORITY ;
+                break ;
+
+             case 'WARN' :
+                 $priority = Gloo_Logger::WARN_PRIORITY ;
+                break ;
+
+             case 'ERROR' :
+                $priority = Gloo_Logger::ERROR_PRIORITY ;
+                break ;
+             default :
+                $priority = Gloo_Logger::ERROR_PRIORITY ;
+                break ;
+
+        }
+
+        return $priority ;
+        
+
+    }
     static function getInstance() {
         if(self::$instance == NULL) {
             self::$instance = new Gloo_Logger();
@@ -40,22 +88,51 @@ class Gloo_Logger {
 	}
 
     function debug($message) {
-        $this->logger->log($message,PEAR_LOG_DEBUG);
+        if(!$this->isDebug) { return ; }
+        // keep the original backtrace of caller
+        
+        if($this->isDebug) {
+            if(intval(Gloo_Logger::DEBUG_PRIORITY) >= $this->priority){
+                $bt = debug_backtrace();
+                $this->logIt($bt, $message, 'debug');
+            }
+
+        }
     }
 
     function info($message) {
-        $this->logger->log($message,PEAR_LOG_INFO);
+       
+        if(intval(Gloo_Logger::INFO_PRIORITY) >= $this->priority){
+                $bt = debug_backtrace();
+                $this->logIt($bt, $message, 'info');
+         }
     }
 
     function warning($message) {
-        $this->logger->log($message,PEAR_LOG_WARNING);
+       
+        if(intval(Gloo_Logger::WARN_PRIORITY) >= $this->priority){
+               $bt = debug_backtrace();
+               $this->logIt($bt, $message, 'warning');
+         }
     }
 
      function error($message) {
-        //why _LOG_ERR and not _LOG_ERROR? God only knows!
-        $this->logger->log($message,PEAR_LOG_ERR);
+       
+        if(intval(Gloo_Logger::ERROR_PRIORITY) >= $this->priority){
+           $bt = debug_backtrace();
+           $this->logIt($bt, $message, 'error');
+         }
     }
     
+    function logIt($bt,$message,$level) {
+        // log messages in UTC timezone
+        $logMessage = "\n". date("d.m.Y H:i:s"). ' ['.$level.'] ';
+        $logMessage .= $bt[0]['file'].' :'.$bt[0]['line'].'  ';
+        $logMessage .= $message ;
+        fwrite($this->fhandle,$logMessage);
+        
+    }
+
 
 
 

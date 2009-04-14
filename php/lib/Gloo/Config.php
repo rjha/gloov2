@@ -58,8 +58,20 @@ class Gloo_Config  {
 	function gmap_key() {
 		return $this->ini_array['gmap.key'];
 	}
-	
-	
+	function is_debug() {
+		$val = $this->ini_array['debug.mode'];
+        if(intval($val) == 1 ) {
+            return true ;
+        } else  {
+            return false ;
+        }
+        
+	}
+    
+	function log_level() {
+		return $this->ini_array['log.level'];
+        
+	}
 	
 	function get_pagination_size() {
 		return $this->ini_array['pagination.size'];
