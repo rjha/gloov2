@@ -1,11 +1,12 @@
 <?php 
 	include 'gloo.inc';
 	require_once ($_SERVER['GLOO_INC_DIR'].'class_loader.inc' );
+    require_once ($_SERVER['GLOO_INC_DIR'].'session.inc' );
 	require_once ($_SERVER['GLOO_INC_DIR'].'error.inc' );
 	
     //web/ca/notes/add/text.php
     $page = new Gloo_Page();
-    
+    $menuKey = $page->set_data('menu_key','FACILITY');
 
 ?>
 
@@ -23,7 +24,12 @@
    
 	
  	<script type="text/javascript" src="<?php echo $glooBaseURI ?>/js/fckeditor/fckeditor.js"></script>
-		
+    <!-- Add YUI events and validation framework -->
+    
+	<script language="javascript" src="http://test.indigloo.com/app/js/yui/yahoo/yahoo-min.js" type="text/javascript"></script>
+	<script language="javascript" src="http://test.indigloo.com/app/js/yui/yahoo-dom-event/yahoo-dom-event.js" type="text/javascript"></script>
+	<script language="javascript" src="http://test.indigloo.com/app2/js/yui-jsvalidate.js" type="text/javascript"> </script>
+
     </head>
 	
 	<body>
@@ -53,25 +59,16 @@
                     $sticky = $page->get_sticky_map('ca_note_form');
                     //page workflow data - set earlier 
                     $menuKey = $page->get_data('menu_key');
-                    $frmMessages = $page->get_message('ca_note_form');
+                    $messages = $page->get_message('ca_note_form');
                     
                 ?>
 
                 <h5> Add Notes </h5>
-				<!-- form  messages -->
-                <?php
-                    foreach($frmMessages as $frmMessage) {
-                 ?>
-                    <ul>
-                        <li> <?php echo $message ?>  </li>
-                    </ul>
-                  <?php
-                    }
-                ?>
-
+				<!-- Any messages from script -->
+                <?php include ($_SERVER['GLOO_INC_DIR'].'script_message.inc'); ?>
 
 				<div id="form">
-				<form name="ca_note_form"  action="<?php echo $glooBaseURI ?>/ca/note/frm/add.php" method="POST"  onSubmit=" " >
+				<form name="ca_note_form"  action="<?php echo $glooBaseURI ?>/ca/note/frm/add.php" method="POST">
                 
 				<a name="spinner"> </a>
 				
@@ -81,7 +78,7 @@
 					</tr>
 					<tr>
 						<td class="field"> <span style="color:red;">*</span> Title : </td>
-						<td> <input type="text" name="title" maxlength="50"  value=""/></td>
+						<td> <input type="text" name="title" maxlength="50" class="required" title="Title is a required field" value=""/></td>
 					</tr>
 												
 					<tr>
