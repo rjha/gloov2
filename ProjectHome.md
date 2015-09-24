@@ -1,0 +1,1 @@
+gloov2 aims to create an easy to use CMS for simple needs.
